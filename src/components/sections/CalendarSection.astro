@@ -81,23 +81,23 @@ const holidayData = await fetchHolidayData();
   }
 
   /* ヘッダー（年月表示） */
-  .calendar-grid [id^="color-calendar"] .calendar__header,
-  .calendar-grid [id^="color-calendar"] .calendar-header {
-    text-align: center !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__header,
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar-header {
+    text-align: center;
     margin-bottom: 1rem;
   }
 
-  .calendar-grid [id^="color-calendar"] .calendar__year {
-    font-size: 1.75rem !important;
-    font-weight: 700 !important;
-    color: rgb(21, 66, 61) !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__year {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: rgb(21, 66, 61);
   }
 
-  .calendar-grid [id^="color-calendar"] .calendar__month {
-    font-size: 1.75rem !important;
-    font-weight: 700 !important;
-    color: rgb(21, 66, 61) !important;
-    text-align: center !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__month {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: rgb(21, 66, 61);
+    text-align: center;
   }
 
   /* 曜日ヘッダー */
@@ -120,28 +120,28 @@ const holidayData = await fetchHolidayData();
   }
 
   /* 今日の日付 */
-  .calendar-grid [id^="color-calendar"] .calendar__day.calendar-today {
-    background-color: rgb(21, 66, 61) !important;
-    color: white !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__day.calendar-today {
+    background-color: rgb(21, 66, 61);
+    color: white;
     font-weight: 700;
   }
 
   /* 選択状態を無効化 */
-  .calendar-grid [id^="color-calendar"] .calendar__day.calendar-selected {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__day.calendar-selected {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   /* 他の月の日付（JavaScript側で非表示処理） */
-  .calendar-grid [id^="color-calendar"] .calendar__day.calendar__day-other {
-    color: #9ca3af !important;
-    background-color: transparent !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__day.calendar__day-other {
+    color: #9ca3af;
+    background-color: transparent;
   }
 
   /* イベント点を非表示 */
-  .calendar-grid [id^="color-calendar"] .calendar__day-bullet {
-    display: none !important;
+  .calendar-grid [id^="color-calendar"].color-calendar .calendar__day-bullet {
+    display: none;
   }
 
   /* モバイル対応 */

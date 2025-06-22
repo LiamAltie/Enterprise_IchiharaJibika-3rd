@@ -53,6 +53,11 @@ li {
 
 /* 17px */
 
+/* Hero section time element styling */
+section time.text-white {
+  font-size: 1.7rem;
+}
+
 /* Global heading styles */
 .heading-leaf {
   color: var(--firefly);

@@ -4,12 +4,60 @@
  * 大きなヒーロー画像と最新のお知らせを表示するセクション
  */
 
-// TODO: APIからニュースデータを取得する実装に置き換える
-const featuredNews = {
-  title: "年末年始の診療予定について",
-  publishDate: "2024-06-18T00:00:00.000Z",
-  id: "featured-news-1",
-};
+interface NewsItem {
+  id: string;
+  title: string;
+  publishedAt: string;
+  publishDate: string;
+  contents?: string;
+  createdAt: string;
+  updatedAt: string;
+  revisedAt: string;
+}
+
+interface NewsListResponse {
+  contents: NewsItem[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
+
+async function fetchLatestNews(): Promise<NewsItem | null> {
+  try {
+    const response = await fetch(
+      `${import.meta.env.PUBLIC_MICROCMS_BASE_URL}/news?limit=1&orders=-publishDate`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": import.meta.env.MICROCMS_API_KEY,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: NewsListResponse = await response.json();
+    return data.contents?.[0] || null;
+  } catch (error) {
+    console.error("Latest news fetch error:", error);
+    return null;
+  }
+}
+
+const latestNews = await fetchLatestNews();
+
+const featuredNews = latestNews
+  ? {
+      title: latestNews.title,
+      publishDate: latestNews.publishDate,
+      id: latestNews.id,
+    }
+  : {
+      title: "お知らせはありません",
+      publishDate: new Date().toISOString(),
+      id: "no-news",
+    };
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -37,7 +85,10 @@ const formatDate = (dateString: string) => {
     style="background: linear-gradient(135deg, hsl(173, 52%, 17%) 0%, hsl(190, 100%, 23%) 100%); box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"
   >
     <div class="col-span-3 flex items-center justify-center flex-col">
-      <time class="text-white" datetime={featuredNews.publishDate}>
+      <time
+        class="text-white font-medium"
+        datetime={featuredNews.publishDate}
+      >
         {formatDate(featuredNews.publishDate)}
       </time>
     </div>
