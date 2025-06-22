@@ -1,0 +1,100 @@
+---
+/**
+ * ScheduleSection - 診療時間・予約案内セクション
+ * 診療時間表、受付時間、予約システムの案内を表示
+ */
+
+const scheduleData = [
+  ['09:00 - 13:00 ', '休', '◯', '◯', '休', '◯', '◯', '休'],
+  ['15:00 - 19:00 ', '休', '◯', '◯', '休', '◯', '◯', '休'],
+];
+---
+
+<section class="w-full max-w-screen-lg schedule-section pb-16 px-2 lg:px-0" aria-label="診療時間・予約案内">
+  <h1 class="heading-leaf">診療時間</h1>
+  <div class="grid grid-cols-2 w-full gap-8 place-items-center">
+    <!-- Left -->
+    <div class="lg:col-span-1 col-span-2 w-full">
+      <table class="min-w-full divide-y text-center">
+        <thead>
+          <tr class="divide-x text-center bg-firefly">
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem] first:rounded-tl-2xl last:rounded-tr-2xl">診療時間</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">月</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">火</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">水</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">木</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">金</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem]">土</th>
+            <th scope="col" class="px-4 py-3.5 text-center text-white font-normal text-[1.6rem] last:rounded-tr-2xl">日祝</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 bg-white">
+          {scheduleData.map((row, rowIndex) => (
+            <tr class="divide-x divide-gray-200">
+              {row.map((cell, cellIndex) => (
+                <td class={`whitespace-nowrap p-4 text-[1.6rem] ${
+                  rowIndex === scheduleData.length - 1 && cellIndex === 0 ? 'rounded-bl-2xl' : ''
+                } ${
+                  rowIndex === scheduleData.length - 1 && cellIndex === row.length - 1 ? 'rounded-br-2xl' : ''
+                }`}>
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <!-- Right -->
+    <div class="lg:col-span-1 col-span-2 w-full mx-2">
+      <h2 class="heading-sub">窓口受付時間</h2>
+      <p class="mt-4 pl-4">08:30 ~ 19:00</p>
+      <p class="pl-4 text-red-600">
+        診察可能人数を超えた場合は、19:00より前に受付を締め切らせていただきます。
+      </p>
+      <h2 class="heading-sub mt-4">予約システム利用可能時間</h2>
+      <p class="mt-4 pl-4">24時間（自動音声）</p>
+      <p class="pl-4">※診察希望日の３日前から予約可</p>
+      <p class="pl-4">
+        ※午前2～4時の間はメンテナンス中のため、ご利用できない場合がございます。ご了承ください。
+      </p>
+      <div class="lg:block hidden">
+        <a
+          href="https://www2.i-helios-net.com/pc/hw2_pc_login.php?MID=1935"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-anim mt-8 ml-4"
+        >
+          <span>予約する</span>
+        </a>
+        <a
+          href="https://ichi-jibi.com/monshinhyou.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-anim mt-8 ml-4"
+        >
+          <span>問診票のダウンロード</span>
+        </a>
+      </div>
+      <div class="lg:hidden">
+        <a
+          href="https://www2.i-helios-net.com/hw2_web_login.php?MID=1935"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-anim mt-8 ml-4"
+        >
+          <span>予約する</span>
+        </a>
+        <a
+          href="https://ichi-jibi.com/monshinhyou.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-anim mt-8 ml-4"
+        >
+          <span>問診票のダウンロード</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+

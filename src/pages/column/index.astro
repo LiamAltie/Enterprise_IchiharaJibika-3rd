@@ -1,0 +1,21 @@
+---
+/**
+ * スタッフコラム一覧ページ
+ * 最新のコラムを表示し、全コラム一覧をサイドバーに配置
+ */
+
+import Layout from "../../layouts/Layout.astro";
+import ColumnSection from "../../components/sections/ColumnSection.astro";
+import { fetchColumnList } from "../../utils/columnData";
+
+// MicroCMSからコラムデータを取得
+const columnList = await fetchColumnList();
+---
+
+<Layout title="スタッフコラム一覧">
+  <div class="grid place-items-center">
+    <div class="mt-8">
+      <ColumnSection columnList={columnList} showFullContent={false} />
+    </div>
+  </div>
+</Layout>

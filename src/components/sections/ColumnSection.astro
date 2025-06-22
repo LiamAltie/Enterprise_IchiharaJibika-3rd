@@ -1,0 +1,143 @@
+---
+/**
+ * ColumnSection - スタッフコラム共通セクション
+ * コラム詳細とコラム一覧の共通レイアウト
+ */
+
+// 型定義
+interface ColumnItem {
+  id: string;
+  title: string;
+  content: string;
+  month: number;
+  year: number;
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  revisedAt: string;
+}
+
+interface Props {
+  currentColumn?: ColumnItem;
+  columnList: ColumnItem[];
+  showFullContent?: boolean;
+}
+
+const { currentColumn, columnList, showFullContent = false } = Astro.props;
+
+// 表示するコラムを決定（指定されていない場合は最新を使用）
+const displayColumn = currentColumn || columnList[0];
+---
+
+<section class="w-full max-w-screen-lg px-4 lg:px-0">
+  <h1 class="heading-leaf">スタッフコラム</h1>
+  
+  {columnList.length === 0 ? (
+    <p class="text-center text-gray-500 mt-8">コラムはまだありません</p>
+  ) : displayColumn ? (
+    <div class="grid grid-cols-12 gap-8">
+      <!-- メインコンテンツ -->
+      <div class="lg:col-span-8 col-span-12">
+        <h2 class="heading-sub">
+          {displayColumn.month}月のテーマ：{displayColumn.title}
+        </h2>
+        <div class="mt-8 px-4 content-box" set:html={displayColumn.content}></div>
+      </div>
+      
+      <!-- サイドバー：コラム一覧 -->
+      <div class="lg:col-span-4 col-span-12">
+        <h3 class="text-center font-medium">コラム一覧</h3>
+        {columnList.map((item) => (
+          <div>
+            <a href={`/column/${item.id}`}>
+              <h2 class={`heading-sub side mt-4 ${item.id === displayColumn.id ? 'current' : ''}`}>
+                {item.year}.{item.month}月：{item.title}
+              </h2>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p class="text-center text-gray-500 mt-8">コラムが見つかりません</p>
+  )}
+  
+  <!-- トップページへの戻るリンク -->
+  <div class="mt-12 text-center">
+    <a href="/" class="inline-block">
+      <p class="text-bondi-blue hover:opacity-75 transition-opacity">
+        <i class="fa fa-arrow-left pr-2"></i>
+        トップページに戻る
+      </p>
+    </a>
+  </div>
+</section>
+
+<style>
+  .heading-leaf {
+    color: rgb(21, 66, 61);
+    text-align: center;
+    font-weight: 500;
+    font-size: 2.75rem;
+    margin: 3rem 0;
+    letter-spacing: 0.25rem;
+  }
+
+  .heading-leaf::before,
+  .heading-leaf::after {
+    font-family: "Font Awesome 5 Free";
+    content: '\f06c';
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-right: 4px;
+    color: rgb(21, 66, 61);
+    padding: 0 1rem;
+  }
+
+  .heading-sub {
+    border-left: #00abb3 solid 5px;
+    padding: 0.25rem 0.5rem;
+    font-size: 2rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+
+  .heading-sub:hover {
+    opacity: 0.7;
+  }
+
+  /* サイドバーのコラム見出しサイズ調整 */
+  .side {
+    font-size: 1.6rem;
+  }
+
+  /* 現在表示中のコラム */
+  .current {
+    background-color: rgba(0, 171, 179, 0.1);
+    border-left-color: #00abb3;
+    border-left-width: 8px;
+  }
+
+  /* コンテンツボックス内の画像スタイル（:global()でinnerHTMLに適用） */
+  :global(.content-box img) {
+    margin: 2rem auto;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  h3 {
+    font-weight: 500;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .text-bondi-blue {
+    color: #00abb3;
+  }
+</style>

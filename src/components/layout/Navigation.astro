@@ -1,0 +1,74 @@
+---
+const menuItems = [
+  {
+    jaTitle: "ホーム",
+    enTitle: "home",
+    slug: "/",
+    icon: "house",
+  },
+  {
+    jaTitle: "医院紹介",
+    enTitle: "about",
+    slug: "/about",
+    icon: "stethoscope",
+  },
+  {
+    jaTitle: "ご案内",
+    enTitle: "medical",
+    slug: "/medical",
+    icon: "book-medical",
+  },
+  {
+    jaTitle: "コラム",
+    enTitle: "column",
+    slug: "/column",
+    icon: "pencil",
+  },
+  {
+    jaTitle: "アクセス",
+    enTitle: "access",
+    slug: "/access",
+    icon: "map",
+  },
+];
+---
+
+<nav class="w-full hidden lg:block lg:py-6">
+  <div class="w-full max-w-screen-lg mx-auto">
+    <div class="grid grid-cols-5 h-20">
+      {
+        menuItems.map((item) => (
+          <a
+            href={item.slug}
+            class="col-span-1 flex place-items-center justify-center flex-col"
+          >
+            <p class="text-[2rem] font-zen-maru font-medium text-firefly">
+              {item.jaTitle}
+            </p>
+            <p class="text-[2rem] font-zen-maru font-medium text-firefly">
+              {item.enTitle}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+
+    <nav
+      class="w-full max-w-screen-md grid grid-cols-5 lg:hidden fixed bottom-0 z-10 bg-firefly px-4 pt-4 pb-2"
+    >
+      {
+        menuItems.map((item) => (
+          <a
+            href={item.slug}
+            class="col-span-1 flex place-items-center justify-center flex-col"
+          >
+            <div>
+              <i class={`fa fa-${item.icon} text-white text-[2rem]`} />
+            </div>
+            <p class="text-[10px] text-white">{item.jaTitle}</p>
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</nav>

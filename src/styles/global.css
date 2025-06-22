@@ -1,0 +1,134 @@
+@import 'destyle.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for colors */
+:root {
+  --tango: rgb(238, 118, 38);
+  --firefly: rgb(21, 66, 61);
+  --bondi-blue: #00ABB3;
+}
+
+html {
+  font-size: 62.5%;
+  /* 1rem = 10px for consistent rem-to-px mapping */
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 500;
+}
+
+body {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  color: #333;
+  background: #eee;
+  overflow-x: hidden;
+}
+
+/* Base typography matching original Nuxt configuration */
+h1 {
+  font-size: 3rem;
+}
+
+/* 30px */
+h2 {
+  font-size: 2.6rem;
+}
+
+/* 26px */
+h3 {
+  font-size: 2rem;
+}
+
+/* 20px */
+p {
+  font-size: 1.7rem;
+}
+
+/* 17px */
+li {
+  font-size: 1.7rem;
+}
+
+/* 17px */
+
+/* Global heading styles */
+.heading-leaf {
+  color: var(--firefly);
+  text-align: center;
+  font-weight: 500;
+  font-size: 2.75rem;
+  margin: 3rem 0;
+  letter-spacing: 0.25rem;
+}
+
+.heading-leaf::before,
+.heading-leaf::after {
+  font-family: "Font Awesome 5 Free";
+  content: '\f06c';
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-right: 4px;
+  color: var(--firefly);
+  padding: 0 1rem;
+}
+
+.heading-sub {
+  border-left: var(--bondi-blue) solid 5px;
+  padding: 0.25rem 0.5rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+/* Animated button styles */
+.btn-anim {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.25s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  color: #fff;
+  background: var(--firefly);
+}
+
+.btn-anim::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;
+  height: 500%;
+  content: "";
+  transition: all 0.25s ease-in-out;
+  transform: translateX(-95%) translateY(-25%) rotate(45deg);
+  background: var(--bondi-blue);
+}
+
+.btn-anim:hover::before {
+  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+
+.btn-anim span {
+  position: relative;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}

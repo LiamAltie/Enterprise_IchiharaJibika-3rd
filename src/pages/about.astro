@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const bioItems = [
+  { year: '1998年', description: '札幌医科大学卒業' },
+  { year: '1998年', description: '千葉大学医学部附属病院耳鼻咽喉科入局' },
+  { year: '1999年', description: '横須賀共済病院' },
+  { year: '2000年', description: '千葉県がんセンター' },
+  { year: '2004年', description: '鹿島労災病院' },
+  { year: '2005年', description: '船橋医療センター' },
+  { year: '2006年', description: '千葉大学医学部附属病院　耳鼻咽喉科　医員、助教' },
+  { year: '2010年', description: '千葉県がんセンター頭頸科(耳鼻咽喉科)　部長' },
+  { year: '2022年', description: 'いちはら耳鼻咽喉科　院長' },
+];
+
+const certifications = [
+  '日本耳鼻咽喉科頭頸部外科学会　耳鼻咽喉科専門医・指導医',
+  '日本頭頸部外科学会　頭頸部がん専門医・指導医',
+  '日本がん治療認定医機構　がん治療認定医',
+  '身体障害者福祉法指定医',
+  '臨床研修指導医',
+  '補聴器相談医　他',
+];
+
+const affiliations = [
+  '日本耳鼻咽喉科頭頸部外科学会',
+  '耳鼻咽喉科臨床学会',
+  '日本頭頸部癌学会',
+  '日本頭頸部外科学会　他',
+];
+
+const clinicImages = [
+  { src: '/images/about/1.jpg', caption: '外観' },
+  { src: '/images/about/2.jpg', caption: '駐車場' },
+  { src: '/images/about/3.jpg', caption: '芝生広場' },
+  { src: '/images/about/4.jpg', caption: '外待合室' },
+  { src: '/images/about/6.jpg', caption: 'トイレ' },
+  { src: '/images/about/7.jpg', caption: '中待合室' },
+  { src: '/images/about/8.jpg', caption: '診察室' },
+  { src: '/images/about/9.jpg', caption: '聴力検査室' },
+  { src: '/images/about/10.jpg', caption: 'レントゲン室' },
+  { src: '/images/about/11.jpg', caption: '予防室' },
+  { src: '/images/about/12.jpg', caption: 'ネブライザー' },
+];
+---
+
+<Layout title="医院紹介 - いちはら耳鼻咽喉科">
+  <div class="grid place-items-center">
+    <div class="mt-8 w-full max-w-screen-lg px-4 lg:px-0">
+    <h1 class="heading-leaf" id="greet">院長あいさつ</h1>
+    <div class="grid grid-cols-12 gap-8">
+      <div class="lg:col-span-8 col-span-12 order-2 lg:order-1">
+        <p class="mt-5">院長の佐々木慶太です</p>
+        <p class="mt-5">私はこれまで千葉大学付属病院耳鼻咽喉科および関連病院で、小児から成人の耳鼻咽喉科疾患の診察、研究、若手医師の育成に取り組んできました。</p>
+        <p class="mt-5">2010年からは千葉県がんセンター頭頸科(耳鼻咽喉科)の責任者として、手術を中心に県内外の患者様に対する耳鼻咽喉科領域のがん最先端医療に従事してきました。</p>
+        <p class="mt-5">2022年12月にいちはら耳鼻咽喉科院長に就任して以降は、地域の皆様の健康をサポートできるよう全力で取り組んでおります。今後も優しく丁寧な診療を心がけ、赤ちゃんからご高齢の方まで安心して通院できるクリニックを目指します。</p>
+      </div>
+      <div class="lg:col-span-4 col-span-12 mt-4 order-1 lg:order-2">
+        <img src="/images/about/profile.webp" alt="院長　佐々木慶太" class="w-full h-auto rounded-2xl" />
+        <p class="text-center py-4">院長　佐々木慶太</p>
+      </div>
+    </div>
+    
+    <h2 class="heading-sub mt-8">略歴</h2>
+    {bioItems.map((item) => (
+      <div class="grid grid-cols-12 gap-8">
+        <div class="lg:col-span-2 col-span-3 text-right">
+          <p>{item.year}</p>
+        </div>
+        <div class="lg:col-span-10 col-span-9">
+          <p>{item.description}</p>
+        </div>
+      </div>
+    ))}
+    
+    <h2 class="heading-sub mt-8">資格</h2>
+    {certifications.map((cert) => (
+      <div class="grid grid-cols-12 gap-8">
+        <div class="lg:col-span-2 hidden lg:block text-right" />
+        <div class="lg:col-span-10 col-span-12">
+          <p>{cert}</p>
+        </div>
+      </div>
+    ))}
+    
+    <h2 class="heading-sub mt-8">所属学会</h2>
+    {affiliations.map((affiliation) => (
+      <div class="grid grid-cols-12 gap-8">
+        <div class="lg:col-span-2 hidden lg:block text-right" />
+        <div class="lg:col-span-10 col-span-12">
+          <p>{affiliation}</p>
+        </div>
+      </div>
+    ))}
+    
+    <h1 class="heading-leaf">医院紹介</h1>
+    <div class="grid grid-cols-12 gap-8">
+      {clinicImages.map((image) => (
+        <div class="col-span-12 lg:col-span-6 relative">
+          <img src={image.src} alt={image.caption} class="w-full rounded-2xl" />
+          <p class="absolute bottom-0 right-0 py-3 px-8 rounded-2xl bg-bondi-blue text-white font-medium" style="border-radius: 1rem 0 1rem 0;">{image.caption}</p>
+        </div>
+      ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+

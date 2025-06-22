@@ -1,0 +1,126 @@
+---
+/**
+ * お知らせ一覧ページ
+ * すべてのお知らせを表示するページ
+ */
+
+import Layout from "../../layouts/Layout.astro";
+
+// MicroCMSからのレスポンス型定義
+interface NewsItem {
+  id: string;
+  title: string;
+  publishedAt: string;
+  contents?: string;
+  createdAt: string;
+  updatedAt: string;
+  revisedAt: string;
+}
+
+interface NewsListResponse {
+  contents: NewsItem[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
+
+// MicroCMSからnewsデータを取得
+async function fetchAllNewsData(): Promise<NewsItem[]> {
+  try {
+    const response = await fetch(
+      `${import.meta.env.PUBLIC_MICROCMS_BASE_URL}/news?limit=100&orders=-publishedAt`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": import.meta.env.MICROCMS_API_KEY,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: NewsListResponse = await response.json();
+    return data.contents || [];
+  } catch (error) {
+    console.error("News data fetch error:", error);
+    return [];
+  }
+}
+
+const newsData = await fetchAllNewsData();
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
+---
+
+<Layout title="お知らせ一覧">
+  <div class="grid place-items-center">
+    
+    <section class="w-full max-w-screen-lg pb-16 px-4 lg:px-0 mt-8">
+      <h1 class="heading-leaf">お知らせ一覧</h1>
+      
+      {newsData.length === 0 ? (
+        <p class="text-center text-gray-500 mt-8">お知らせはありません</p>
+      ) : (
+        newsData.map((news) => (
+          <div class="grid grid-cols-12 lg:gap-8 gap-2 mt-8 pb-4" style="border-bottom: dashed 1px rgba(0, 171, 179, 0.5);">
+            <!--Left-->
+            <div class="lg:col-span-2 col-span-12">
+              <p class="lg:text-right font-normal">
+                {formatDate(news.publishedAt)}
+              </p>
+            </div>
+            <!--Right-->
+            <div class="lg:col-span-10 col-span-12">
+              <a href={`/info/${news.id}`}>
+                <p class="inline font-medium text-bondi-blue border-b border-bondi-blue border-opacity-50 hover:opacity-75 transition-opacity">
+                  {news.title}
+                  <i class="fa fa-arrow-right pl-2 transition-transform duration-250 ease-in-out hover:translate-x-2"></i>
+                </p>
+              </a>
+            </div>
+          </div>
+        ))
+      )}
+      
+      <div class="mt-12 text-center">
+        <a href="/" class="inline-block">
+          <p class="text-bondi-blue hover:opacity-75 transition-opacity">
+            <i class="fa fa-arrow-left pr-2"></i>
+            トップページに戻る
+          </p>
+        </a>
+      </div>
+    </section>
+    
+  </div>
+</Layout>
+
+<style>
+  .heading-leaf {
+    color: rgb(21, 66, 61);
+    text-align: center;
+    font-weight: 500;
+    font-size: 2.75rem;
+    margin: 3rem 0;
+    letter-spacing: 0.25rem;
+  }
+
+  .heading-leaf::before,
+  .heading-leaf::after {
+    font-family: "Font Awesome 5 Free";
+    content: '\f06c';
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-right: 4px;
+    color: rgb(21, 66, 61);
+    padding: 0 1rem;
+  }
+  
+  .text-bondi-blue {
+    color: #00abb3;
+  }
+</style>

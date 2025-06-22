@@ -1,0 +1,352 @@
+---
+/**
+ * CalendarSection - カレンダーセクション
+ * 診療スケジュールカレンダーを表示（Color Calendar使用）
+ */
+
+// MicroCMSからholidayデータを取得
+async function fetchHolidayData() {
+  try {
+    const limit = new Date().getMonth() + 62;
+    const response = await fetch(
+      `${import.meta.env.PUBLIC_MICROCMS_BASE_URL}/holiday?limit=${limit}`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": import.meta.env.MICROCMS_API_KEY,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.contents || [];
+  } catch (error) {
+    console.error("Holiday data fetch error:", error);
+    return [];
+  }
+}
+
+const holidayData = await fetchHolidayData();
+---
+
+<!-- Color Calendar CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/color-calendar/dist/css/theme-basic.css"
+/>
+
+<section
+  class="w-full max-w-screen-lg pb-16 px-2 lg:px-0"
+  aria-label="診療カレンダー"
+>
+  <h1 class="heading-leaf">カレンダー</h1>
+  <p class="mt-2 text-[1.6rem] font-medium text-pink-700">赤：休診日</p>
+  <p class="mt-2 text-[1.6rem] font-medium text-blue-700">青：休日当番医</p>
+
+  <!-- Calendar container -->
+  <div class="mt-4">
+    <div class="calendar-grid lg:grid lg:grid-cols-3 lg:gap-6">
+      <div
+        id="color-calendar-1"
+        class="bg-white border border-gray-300 rounded-lg p-4 mb-4 lg:mb-0"
+      >
+      </div>
+      <div
+        id="color-calendar-2"
+        class="bg-white border border-gray-300 rounded-lg p-4 mb-4 lg:mb-0"
+      >
+      </div>
+      <div
+        id="color-calendar-3"
+        class="bg-white border border-gray-300 rounded-lg p-4"
+      >
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Calendar CSS -->
+<style>
+  /* カレンダーコンテナ */
+  .calendar-grid [id^="color-calendar"] {
+    width: 100%;
+    max-width: 100%;
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  /* ヘッダー（年月表示） */
+  .calendar-grid [id^="color-calendar"] .calendar__header,
+  .calendar-grid [id^="color-calendar"] .calendar-header {
+    text-align: center !important;
+    margin-bottom: 1rem;
+  }
+
+  .calendar-grid [id^="color-calendar"] .calendar__year {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: rgb(21, 66, 61) !important;
+  }
+
+  .calendar-grid [id^="color-calendar"] .calendar__month {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: rgb(21, 66, 61) !important;
+    text-align: center !important;
+  }
+
+  /* 曜日ヘッダー */
+  .calendar-grid [id^="color-calendar"] .calendar__weekday {
+    font-weight: 700;
+    color: #374151;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  /* 日付セル */
+  .calendar-grid [id^="color-calendar"] .calendar__day {
+    font-weight: 600;
+    line-height: 1.2;
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  /* 今日の日付 */
+  .calendar-grid [id^="color-calendar"] .calendar__day.calendar-today {
+    background-color: rgb(21, 66, 61) !important;
+    color: white !important;
+    font-weight: 700;
+  }
+
+  /* 選択状態を無効化 */
+  .calendar-grid [id^="color-calendar"] .calendar__day.calendar-selected {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 他の月の日付（JavaScript側で非表示処理） */
+  .calendar-grid [id^="color-calendar"] .calendar__day.calendar__day-other {
+    color: #9ca3af !important;
+    background-color: transparent !important;
+  }
+
+  /* イベント点を非表示 */
+  .calendar-grid [id^="color-calendar"] .calendar__day-bullet {
+    display: none !important;
+  }
+
+  /* モバイル対応 */
+  @media (max-width: 1023px) {
+    .calendar-grid {
+      display: block;
+    }
+  }
+</style>
+
+<!-- Calendar Script -->
+<script src="https://cdn.jsdelivr.net/npm/color-calendar/dist/bundle.js"
+></script>
+<script define:vars={{ holidayData }}>
+  window.holidayData = holidayData;
+
+  /**
+   * カレンダー初期化
+   */
+  function initializeCalendar() {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+    // 3つのカレンダーを作成
+    for (let i = 0; i < 3; i++) {
+      createCalendar(i, currentYear, currentMonth);
+    }
+  }
+
+  /**
+   * 個別カレンダーの作成
+   */
+  function createCalendar(index, year, month) {
+    const calendarEl = document.getElementById(`color-calendar-${index + 1}`);
+    if (!calendarEl) return;
+
+    const displayDate = new Date(year, month + index, 1);
+
+    try {
+      const calendar = new Calendar({
+        id: `#color-calendar-${index + 1}`,
+        calendarSize: "large",
+        theme: "basic",
+        primaryColor: "rgb(21, 66, 61)",
+        headerColor: "rgb(21, 66, 61)",
+        customWeekdayValues: ["日", "月", "火", "水", "木", "金", "土"],
+        startWeekday: 0,
+        fontFamilyHeader: "inherit",
+        fontFamilyWeekdays: "inherit",
+        fontFamilyBody: "inherit",
+        disableMonthYearPickers: true,
+        disableMonthArrowClick: true,
+        disableDayClick: true,
+        eventsData: [],
+        monthChanged: () => setTimeout(() => applyStyles(calendarEl), 100),
+      });
+
+      calendar.setDate(displayDate);
+
+      // 初期化後の処理
+      setTimeout(() => {
+        removeSelection(calendarEl);
+        applyStyles(calendarEl);
+      }, 200);
+    } catch (error) {
+      console.error(`Calendar ${index + 1} creation error:`, error);
+    }
+  }
+
+  /**
+   * 選択状態を削除
+   */
+  function removeSelection(calendarEl) {
+    const selectedElements = calendarEl.querySelectorAll(
+      ".calendar-selected, .calendar__day-selected",
+    );
+    selectedElements.forEach((el) => {
+      el.classList.remove("calendar-selected", "calendar__day-selected");
+    });
+  }
+
+  /**
+   * カスタムスタイル適用
+   */
+  function applyStyles(calendarEl) {
+    // 曜日ヘッダーのフォントサイズを1.5remに強制上書き
+    const weekdayElements = calendarEl.querySelectorAll(".calendar__weekday");
+    weekdayElements.forEach((element) => {
+      element.style.fontSize = "1.5rem";
+    });
+
+    // 日付のフォントサイズを1.5remに強制上書き
+    const dateElements = calendarEl.querySelectorAll(".calendar__day");
+    dateElements.forEach((element) => {
+      element.style.fontSize = "1.5rem";
+
+      const isCurrentMonth = !element.classList.contains("calendar__day-other");
+
+      // 他の月の日付は薄いグレーで表示（レイアウト保持）
+      if (!isCurrentMonth) {
+        element.style.color = "#e5e7eb";
+        element.style.backgroundColor = "transparent";
+        element.style.opacity = "1";
+        return;
+      }
+
+      const dateStr = getDateString(element);
+      if (!dateStr) return;
+
+      const date = new Date(dateStr);
+      const dayOfWeek = date.getDay();
+
+      // 特別な日の確認（MicroCMS データ）
+      const specialDay = findSpecialDay(dateStr);
+      if (specialDay) {
+        applySpecialDayStyle(element, specialDay);
+        return;
+      }
+
+      if (dayOfWeek === 0 || dayOfWeek === 3 || dayOfWeek === 6) {
+        applyWeekdayStyle(element);
+      }
+    });
+  }
+
+  /**
+   * 日付文字列を取得
+   */
+  function getDateString(element) {
+    // 他の月の日付の場合は日付文字列を生成しない
+    if (element.classList.contains("calendar__day-other")) {
+      return null;
+    }
+
+    let dateStr = element.getAttribute("data-date");
+
+    if (!dateStr && element.textContent) {
+      const dayNumber = parseInt(element.textContent.trim());
+      if (isNaN(dayNumber)) return null;
+
+      // カレンダーの月を特定
+      const calendarContainer = element.closest('[id^="color-calendar"]');
+      const calendarId = calendarContainer?.id || "";
+      const calendarIndex =
+        parseInt(calendarId.replace("color-calendar-", "")) - 1;
+
+      const today = new Date();
+      const baseMonth = today.getMonth();
+      const baseYear = today.getFullYear();
+
+      // 各カレンダーの表示月を正しく計算
+      const targetMonth = baseMonth + calendarIndex;
+      const targetYear = baseYear + Math.floor(targetMonth / 12);
+      const adjustedMonth = targetMonth % 12;
+
+      const fullDate = new Date(targetYear, adjustedMonth, dayNumber);
+      dateStr = fullDate.toISOString().split("T")[0];
+    }
+
+    return dateStr;
+  }
+
+  /**
+   * 特別な日を検索
+   */
+  function findSpecialDay(dateStr) {
+    return window.holidayData.find((item) => {
+      const itemDateOnly = item.date.split("T")[0];
+      return itemDateOnly === dateStr;
+    });
+  }
+
+  /**
+   * 特別な日のスタイル適用
+   */
+  function applySpecialDayStyle(element, specialDay) {
+    if (specialDay.isDoctor) {
+      element.classList.add("calendar-doctor");
+      element.title = "休日当番医";
+      element.style.backgroundColor = "#dbeafe";
+      element.style.color = "#1d4ed8";
+    } else {
+      element.classList.add("calendar-holiday");
+      element.title = "休診日";
+      element.style.backgroundColor = "#fecaca";
+      element.style.color = "#b91c1c";
+    }
+  }
+
+  /**
+   * 曜日スタイル適用
+   */
+  function applyWeekdayStyle(element) {
+    element.classList.add("calendar-holiday");
+    element.style.backgroundColor = "#fecaca";
+    element.style.color = "#b91c1c";
+  }
+
+  /**
+   * 初期化実行
+   */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeCalendar);
+  } else {
+    initializeCalendar();
+  }
+</script>

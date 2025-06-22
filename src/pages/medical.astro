@@ -1,0 +1,178 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const symptoms = [
+  [
+    "耳が痛い",
+    "耳がつまった感じ",
+    "耳の中がかゆい",
+    "聞こえが悪くなった",
+    "音が響いて聞こえる",
+    "耳だれが出た",
+    "耳掃除をしてほしい",
+    "耳の下がはれた、痛い",
+    "めまいがする",
+    "補聴器について知りたい",
+  ],
+  [
+    "鼻水が出る",
+    "鼻がつまる",
+    "くしゃみが多い",
+    "鼻の中がかゆい、痛い",
+    "鼻血が出る",
+    "においがわからない",
+    "鼻をぶつけた",
+  ],
+  [
+    "のどが痛い",
+    "のどにつまり感がある",
+    "声がかすれる",
+    "咳が出る",
+    "食べ物が飲み込みづらい",
+    "魚の骨がささった",
+  ],
+  [
+    "顔がしびれて動かない",
+    "口内炎ができた",
+    "おたふくが心配",
+    "甲状腺が心配",
+    "インフルエンザ検査",
+    "舌下免疫療法を検討している",
+  ],
+];
+
+const symptomTitles = ["耳の症状", "鼻の症状", "のどの症状", "その他の症状"];
+const symptomImages = [
+  "/images/medical/1.jpg",
+  "/images/medical/2.jpg",
+  "/images/medical/3.jpg",
+  "/images/medical/4.jpg",
+];
+---
+
+<Layout title="診療のご案内 - いちはら耳鼻咽喉科">
+  <div class="grid place-items-center">
+    <div class="mt-8 w-full max-w-screen-lg px-4 lg:px-0">
+      <h1 class="heading-leaf">診療のご案内</h1>
+      <p class="text-center">
+        下記のような症状でお困りの時は、お気軽に受診してください。
+      </p>
+
+      <div class="grid grid-cols-12 gap-8 mt-8">
+        {
+          symptoms.map((symptomList, index) => (
+            <div class="col-span-12 lg:col-span-3 md:col-span-6 pb-4 rounded-2xl border-2 border-firefly">
+              <div class="text-center">
+                <p class="py-4 text-center bg-firefly text-white rounded-t-lg">
+                  {symptomTitles[index]}
+                </p>
+                <img
+                  src={symptomImages[index]}
+                  alt={symptomTitles[index]}
+                  class="py-4 mx-auto block"
+                />
+              </div>
+              <div class="text-left mt-2 pl-2">
+                {symptomList.map((item) => (
+                  <p class="py-2">
+                    <i class="fa fa-check pl-2" />
+                    {item}
+                  </p>
+                ))}
+              </div>
+              <p class="text-right mt-2">など　</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <h1 class="heading-leaf">予約のご案内</h1>
+      <h2 class="heading-sub">予約システム利用可能時間：24時間</h2>
+      <p class="mt-4">
+        予約システム（Web予約、専用電話予約）では、診察希望日の<span
+          class="text-tango">3日前（休診日を含む）の午前０時</span
+        >から予約が取れます。
+      </p>
+      <p>初めて受診される方も利用できます。</p>
+      <p>※お問い合わせ電話からの予約はお取りしておりません。</p>
+
+      <h2 class="heading-sub mt-16">窓口受付時間：08:30 〜 19:00</h2>
+      <p class="mt-4">
+        当日のみ窓口での予約も可能です。（当日の予約枠がございます）
+      </p>
+      <p>
+        受付終了時間は19:00ですが、診察可能人数を超えた場合は、19:00より前に受付を締め切らせていただきます。
+      </p>
+      <p>※月初めはマイナンバ－カード又は保険証・受給券を一緒にお出し下さい</p>
+
+      <h2 class="heading-sub mt-16">予約に関する注意事項</h2>
+      <p class="mt-4">
+        <span class="text-tango">予約時間の10分前まで</span
+        >にご来院ください。事前に問診票をご記入いただくと受付がスムーズに行えます。
+      </p>
+      <p>
+        当日の診療状況、急患などにより診察の時間が遅れる場合がございますので、あらかじめお時間に余裕を持って予約をお取りください。
+      </p>
+      <p>
+        <span class="text-tango">直前のキャンセル、無断キャンセル</span
+        >は他の患者様のご迷惑となりますので、ご配慮をお願い致します。<br />
+        無断キャンセルが続きますと、予約システムがご利用できなくなります。
+      </p>
+      <p>
+        初診の方がキャンセルされる場合はお手数ですが、<span class="text-tango"
+          >お問い合わせ電話にご連絡</span
+        >をお願い致します。
+      </p>
+
+      <h1 class="heading-leaf">抱っこ診察のお願い</h1>
+      <p class="mt-4">
+        耳鼻咽喉科ではいろいろな器具を使って耳や鼻、喉を診察します。
+        診察の際にお子さまが暴れてしまうと、とても危険なうえ、必要な診察・治療が行なえません。
+        そのため当院では、保護者の方にご協力いただき「抱っこ」で診察をしています。
+      </p>
+      <p class="mt-4">
+        びっくりしたり怖くなったお子さまは全力で嫌がり、必死に抵抗します。
+        安全のためにスタッフもサポートいたしますが、保護者の方も全力で正しく抱っこしていただきますよう、ご理解・ご協力をお願いいたします。<br
+        />
+        <span class="text-tango"
+          >（下記の『抱っこの仕方』のイラストをご参照ください）</span
+        >
+      </p>
+      <p class="mt-4">
+        妊娠中のお母さまや抱っこに自信のないご家族の代わりにスタッフが抱っこさせていただくことも可能ですので、遠慮なくお申し出ください。
+        診察が終わったら「上手にできたね」と褒めてあげてください。
+      </p>
+
+      <h2 class="heading-sub mt-16">抱っこの仕方</h2>
+      <div class="text-center mt-4 hidden lg:block">
+        <img
+          src="/images/medical/child.png"
+          alt="抱っこの仕方"
+          class="rounded-2xl mx-auto"
+        />
+      </div>
+      <div class="text-center mt-4 lg:hidden">
+        <img
+          src="/images/medical/child_01.png"
+          alt="抱っこの仕方1"
+          class="rounded-2xl mx-auto"
+        />
+        <img
+          src="/images/medical/child_02.png"
+          alt="抱っこの仕方2"
+          class="mt-8 rounded-2xl mx-auto"
+        />
+        <img
+          src="/images/medical/child_03.png"
+          alt="抱っこの仕方3"
+          class="mt-8 rounded-2xl mx-auto"
+        />
+        <img
+          src="/images/medical/child_04.png"
+          alt="抱っこの仕方4"
+          class="mt-8 rounded-2xl mx-auto"
+        />
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,176 @@
+---
+/**
+ * お知らせ詳細ページ
+ * MicroCMSから個別のお知らせ記事を取得して表示
+ */
+
+import Layout from "../../layouts/Layout.astro";
+
+// 型定義
+interface NewsDetail {
+  id: string;
+  title: string;
+  contents: string;
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  revisedAt: string;
+}
+
+interface NewsListResponse {
+  contents: NewsDetail[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
+
+// 静的パスを生成
+export async function getStaticPaths() {
+  try {
+    const response = await fetch(
+      `${import.meta.env.PUBLIC_MICROCMS_BASE_URL}/news?limit=100`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": import.meta.env.MICROCMS_API_KEY,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to fetch news list:", response.status);
+      return [];
+    }
+
+    const data: NewsListResponse = await response.json();
+
+    return data.contents.map((news) => ({
+      params: { id: news.id },
+      props: { article: news },
+    }));
+  } catch (error) {
+    console.error("Error fetching news list:", error);
+    return [];
+  }
+}
+
+// propsから記事データを取得
+const { article } = Astro.props as { article: NewsDetail };
+
+// 記事が存在しない場合は404ページへ
+if (!article) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title={article.title}>
+  <div class="grid place-items-center">
+    <div class="mt-8 w-full max-w-screen-lg px-2 lg:px-0">
+      <h1 class="heading-leaf">お知らせ</h1>
+      <h2 class="heading-sub">{article.title}</h2>
+
+      <!-- HTMLコンテンツを安全にレンダリング -->
+      <div
+        class="mt-16 prose prose-lg max-w-none"
+        set:html={article.contents}
+      />
+    </div>
+
+    <a href="/info" class="back mt-8">
+      <p>
+        <i class="fa fa-arrow-left news-arrow pr-2"></i>
+        お知らせ一覧に戻る
+      </p>
+    </a>
+  </div>
+</Layout>
+
+<style>
+  .back {
+    float: right;
+    display: block;
+    color: #00abb3;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .back:hover {
+    opacity: 0.7;
+  }
+
+  .heading-leaf {
+    color: rgb(21, 66, 61);
+    text-align: center;
+    font-weight: 500;
+    font-size: 2.75rem;
+    margin: 3rem 0;
+    letter-spacing: 0.25rem;
+  }
+
+  .heading-leaf::before,
+  .heading-leaf::after {
+    font-family: "Font Awesome 5 Free";
+    content: '\f06c';
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-right: 4px;
+    color: rgb(21, 66, 61);
+    padding: 0 1rem;
+  }
+
+  .heading-sub {
+    border-left: #00abb3 solid 5px;
+    padding: 0.25rem 0.5rem;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  /* プロースタイルの調整 */
+  .prose {
+    color: #333;
+    line-height: 1.8;
+  }
+
+  .prose h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose p {
+    margin-bottom: 1rem;
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    margin: 2rem auto;
+  }
+
+  .prose blockquote {
+    border-left: 4px solid #00abb3;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #666;
+  }
+</style>

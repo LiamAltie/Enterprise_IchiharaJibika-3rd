@@ -1,0 +1,51 @@
+---
+/**
+ * スタッフコラム詳細ページ
+ * MicroCMSから個別のコラム記事を取得して表示
+ */
+
+import Layout from "../../layouts/Layout.astro";
+import ColumnSection from "../../components/sections/ColumnSection.astro";
+import { fetchColumnList, type ColumnItem } from "../../utils/columnData";
+
+// 静的パスを生成
+export async function getStaticPaths() {
+  try {
+    const columnList = await fetchColumnList();
+
+    return columnList.map((column) => ({
+      params: { id: column.id },
+      props: {
+        currentColumn: column,
+        columnList: columnList,
+      },
+    }));
+  } catch (error) {
+    console.error("Error fetching column list:", error);
+    return [];
+  }
+}
+
+// propsから記事データとコラム一覧を取得
+const { currentColumn, columnList } = Astro.props as {
+  currentColumn: ColumnItem;
+  columnList: ColumnItem[];
+};
+
+// 記事が存在しない場合は404ページへ
+if (!currentColumn) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title={`${currentColumn.month}月のテーマ：${currentColumn.title}`}>
+  <div class="grid place-items-center">
+    <div class="mt-8">
+      <ColumnSection
+        currentColumn={currentColumn}
+        columnList={columnList}
+        showFullContent={true}
+      />
+    </div>
+  </div>
+</Layout>

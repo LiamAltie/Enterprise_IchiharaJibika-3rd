@@ -1,0 +1,104 @@
+---
+/**
+ * NewsSection - お知らせ・LINE案内セクション
+ * 最新のお知らせ一覧とLINE公式アカウントの案内を表示
+ */
+
+// MicroCMSからのレスポンス型定義
+interface NewsItem {
+  id: string;
+  title: string;
+  publishedAt: string;
+  publishDate: string;
+  contents?: string;
+  createdAt: string;
+  updatedAt: string;
+  revisedAt: string;
+  
+}
+
+interface NewsListResponse {
+  contents: NewsItem[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
+
+// MicroCMSからnewsデータを取得
+async function fetchNewsData(): Promise<NewsItem[]> {
+  try {
+    const response = await fetch(
+      `${import.meta.env.PUBLIC_MICROCMS_BASE_URL}/news?limit=20&orders=-publishDate`,
+      {
+        headers: {
+          "X-MICROCMS-API-KEY": import.meta.env.MICROCMS_API_KEY,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data: NewsListResponse = await response.json();
+    return data.contents || [];
+  } catch (error) {
+    console.error("News data fetch error:", error);
+    return [];
+  }
+}
+
+const newsData = await fetchNewsData();
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
+
+const hasContent = (contents: string | undefined): contents is string => {
+  return contents !== undefined && contents.trim() !== '';
+};
+---
+
+<section class="w-full max-w-screen-lg pb-4 news-section px-4 lg:px-0" aria-label="お知らせ・LINE案内">
+  <h1 class="heading-leaf">お知らせ</h1>
+  {newsData.map((news) => (
+    <div class="grid grid-cols-12 lg:gap-8 gap-2 mt-8 pb-4" style="border-bottom: dashed 1px rgba(0, 171, 179, 0.5);">
+      <!--Left-->
+      <div class="lg:col-span-2 col-span-12">
+        <p class="lg:text-right font-normal">
+          {formatDate(news.publishDate)}
+        </p>
+      </div>
+      <!--Right-->
+      <a class="lg:col-span-10 col-span-12" href={`/info/${news.id}`}>
+        <p class="inline font-medium text-bondi-blue border-b border-bondi-blue border-opacity-50 hover:opacity-75 transition-opacity">
+          {news.title}
+          <i class="fa fa-arrow-right pl-2 transition-transform duration-250 ease-in-out hover:translate-x-2"></i>
+        </p>
+      </a>
+    </div>
+  ))}
+  <div class="grid grid-cols-12 mt-8">
+    <div class="col-span-12 lg:text-center">
+      <p>LINE公式アカウントにて、お知らせを随時発信しています。</p>
+      <p>web予約、診療予定の確認もできますので、是非ご利用ください。</p>
+      <img
+        class="mt-4 lg:inline hidden w-[180px] rounded-2xl"
+        src="/images/index/line.png"
+        alt="LINE QR Code"
+      />
+      <div class="lg:hidden text-center mt-4">
+        <a href="https://lin.ee/jvCNDkD" target="_blank" rel="noopener noreferrer">
+          <img
+            src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+            alt="友だち追加"
+            height="36"
+            class="border-0"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+

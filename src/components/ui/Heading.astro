@@ -1,0 +1,37 @@
+---
+/**
+ * 共通見出しコンポーネント
+ * .heading-leafスタイルを統一管理
+ */
+
+interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+}
+
+const { level = 1, class: className } = Astro.props;
+
+const Tag = `h${level}` as any;
+---
+
+<Tag class={`heading-leaf ${className || ''}`}>
+  <slot />
+</Tag>
+
+<style>
+  .heading-leaf {
+    @apply text-firefly text-center font-medium text-heading-main tracking-heading;
+    margin: 3rem 0;
+  }
+
+  .heading-leaf::before,
+  .heading-leaf::after {
+    font-family: "Font Awesome 5 Free";
+    content: '\f06c';
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-right: 4px;
+    @apply text-firefly;
+    padding: 0 1rem;
+  }
+</style>

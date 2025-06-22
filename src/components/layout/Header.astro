@@ -1,0 +1,49 @@
+---
+/**
+ * Header - サイトヘッダー
+ * ロゴ、クリニック名、住所・電話番号を表示するサイトのメインヘッダー
+ */
+---
+
+<header class="w-full">
+  <div
+    class="grid grid-cols-12 h-full border-t-[7px] border-firefly font-zen-maru"
+  >
+    <!-- ロゴ部分 -->
+    <div
+      class="lg:col-span-3 col-span-12 text-center lg:pl-16 lg:pt-4 lg:flex lg:items-center lg:justify-center max-lg:flex max-lg:items-center max-lg:justify-center max-lg:py-8"
+    >
+      <img
+        src="/images/logo.png"
+        alt="いちはら耳鼻咽喉科 ロゴ"
+        class="h-56 max-lg:mx-auto"
+      />
+    </div>
+    <!-- タイトル部分 -->
+    <a
+      class="lg:col-span-6 col-span-12 text-center lg:pt-10"
+      href="/"
+      aria-label="いちはら耳鼻咽喉科 ホームページ"
+    >
+      <h2 class="text-center text-[1.8rem] font-medium">医療法人社団 立志会</h2>
+      <h1 class="text-center text-[4rem] font-normal">いちはら耳鼻咽喉科</h1>
+      <h2 class="text-center text-[1.8rem] font-medium">
+        ichihara ENT clinic.
+      </h2>
+    </a>
+    <!-- 住所部分 -->
+    <div class="lg:col-span-3 hidden lg:block text-center lg:pt-10">
+      <address class="not-italic">
+        <p class="text-center text-[1.6rem] font-medium">〒290-0170</p>
+        <p class="text-center mt-2 text-[1.6rem] font-medium">
+          千葉県市原市うるいど南3-1-1
+        </p>
+        <p class="text-center mt-2 text-[2.7rem] font-normal">
+          <a href="tel:0436768088" aria-label="電話番号 0436-76-8088"
+            >TEL:0436-76-8088</a
+          >
+        </p>
+      </address>
+    </div>
+  </div>
+</header>

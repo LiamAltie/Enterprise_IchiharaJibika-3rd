@@ -1,0 +1,59 @@
+---
+/**
+ * HeroSection - ホームページのメインビジュアルとトップニュース表示
+ * 大きなヒーロー画像と最新のお知らせを表示するセクション
+ */
+
+// TODO: APIからニュースデータを取得する実装に置き換える
+const featuredNews = {
+  title: "年末年始の診療予定について",
+  publishDate: "2024-06-18T00:00:00.000Z",
+  id: "featured-news-1",
+};
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+};
+---
+
+<section
+  class="w-full relative overflow-hidden lg:h-[calc(100vh-23rem)] h-auto pt-8 lg:pt-0"
+  style="width: 100vw;"
+  aria-label="メインビジュアル"
+>
+  <img
+    src="/images/index/catch.webp"
+    alt="いちはら耳鼻咽喉科"
+    class="aspect-video object-contain lg:inline hidden"
+  />
+  <img
+    src="/images/index/catch_sp.webp"
+    alt="いちはら耳鼻咽喉科"
+    class="aspect-square object-contain w-full lg:hidden"
+  />
+  <div
+    class="absolute bottom-0 right-0 grid grid-cols-12 lg:py-8 py-2 lg:px-16 px-4 lg:w-1/3 w-full h-32 font-medium rounded-tl-2xl backdrop-blur-sm shadow-lg"
+    style="background: linear-gradient(135deg, hsl(173, 52%, 17%) 0%, hsl(190, 100%, 23%) 100%); box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"
+  >
+    <div class="col-span-3 flex items-center justify-center flex-col">
+      <time class="text-white" datetime={featuredNews.publishDate}>
+        {formatDate(featuredNews.publishDate)}
+      </time>
+    </div>
+    <a
+      class="col-span-9 flex justify-center flex-col pl-4 group"
+      href={`/info/${featuredNews.id}`}
+      aria-label={`最新のお知らせ: ${featuredNews.title}`}
+    >
+      <div>
+        <p class="inline text-white">
+          {featuredNews.title}
+        </p>
+        <i
+          class="fa fa-arrow-right pl-4 text-[1.6rem] transition-transform duration-250 ease-in-out group-hover:translate-x-2"
+          aria-hidden="true"></i>
+      </div>
+    </a>
+  </div>
+</section>

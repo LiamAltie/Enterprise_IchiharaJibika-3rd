@@ -1,0 +1,41 @@
+---
+/**
+ * 共通サブ見出しコンポーネント
+ * .heading-subスタイルを統一管理
+ */
+
+interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+  href?: string;
+  size?: 'normal' | 'small';
+}
+
+const { level = 2, class: className, href, size = 'normal' } = Astro.props;
+
+const Tag = `h${level}` as any;
+const sizeClass = size === 'small' ? 'text-body-small' : 'text-heading-sub';
+---
+
+{href ? (
+  <a href={href} class={`heading-sub ${sizeClass} ${className || ''}`}>
+    <Tag>
+      <slot />
+    </Tag>
+  </a>
+) : (
+  <Tag class={`heading-sub ${sizeClass} ${className || ''}`}>
+    <slot />
+  </Tag>
+)}
+
+<style>
+  .heading-sub {
+    @apply border-l-bondi-blue border-l-4 pl-2 py-1 font-medium no-underline text-inherit block transition-opacity;
+    border-left-width: 5px;
+  }
+
+  .heading-sub:hover {
+    @apply opacity-70;
+  }
+</style>
