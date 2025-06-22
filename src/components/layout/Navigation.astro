@@ -4,7 +4,7 @@ const menuItems = [
     jaTitle: "ホーム",
     enTitle: "home",
     slug: "/",
-    icon: "house",
+    icon: "home",
   },
   {
     jaTitle: "医院紹介",
@@ -16,13 +16,13 @@ const menuItems = [
     jaTitle: "ご案内",
     enTitle: "medical",
     slug: "/medical",
-    icon: "book-medical",
+    icon: "book",
   },
   {
     jaTitle: "コラム",
     enTitle: "column",
     slug: "/column",
-    icon: "pencil",
+    icon: "edit",
   },
   {
     jaTitle: "アクセス",
@@ -33,6 +33,7 @@ const menuItems = [
 ];
 ---
 
+<!-- Desktop Navigation -->
 <nav class="w-full hidden lg:block lg:py-6">
   <div class="w-full max-w-screen-lg mx-auto">
     <div class="grid grid-cols-5 h-20">
@@ -52,23 +53,25 @@ const menuItems = [
         ))
       }
     </div>
-
-    <nav
-      class="w-full max-w-screen-md grid grid-cols-5 lg:hidden fixed bottom-0 z-10 bg-firefly px-4 pt-4 pb-2"
-    >
-      {
-        menuItems.map((item) => (
-          <a
-            href={item.slug}
-            class="col-span-1 flex place-items-center justify-center flex-col"
-          >
-            <div>
-              <i class={`fa fa-${item.icon} text-white text-[2rem]`} />
-            </div>
-            <p class="text-[10px] text-white">{item.jaTitle}</p>
-          </a>
-        ))
-      }
-    </nav>
   </div>
+</nav>
+
+<!-- Mobile Navigation -->
+<nav
+  class="w-full max-w-screen-md grid grid-cols-5 lg:hidden fixed bottom-0 bg-firefly px-4 pt-4 pb-2"
+  style="z-index: 999;"
+>
+  {
+    menuItems.map((item) => (
+      <a
+        href={item.slug}
+        class="col-span-1 flex place-items-center justify-center flex-col"
+      >
+        <div>
+          <i class={`fa fa-${item.icon} text-white text-[2rem]`} />
+        </div>
+        <p class="text-[10px] text-white">{item.jaTitle}</p>
+      </a>
+    ))
+  }
 </nav>

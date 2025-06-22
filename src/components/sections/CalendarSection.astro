@@ -39,7 +39,7 @@ const holidayData = await fetchHolidayData();
 />
 
 <section
-  class="w-full max-w-screen-lg pb-16 px-2 lg:px-0"
+  class="w-full max-w-screen-lg pb-16 px-4 lg:px-0"
   aria-label="診療カレンダー"
 >
   <h1 class="heading-leaf">カレンダー</h1>
@@ -51,17 +51,17 @@ const holidayData = await fetchHolidayData();
     <div class="calendar-grid lg:grid lg:grid-cols-3 lg:gap-6">
       <div
         id="color-calendar-1"
-        class="bg-white border border-gray-300 rounded-lg p-4 mb-4 lg:mb-0"
+        class="bg-white border border-gray-300 rounded-lg p-3 mb-6 lg:mb-0 mx-auto max-w-sm lg:max-w-none"
       >
       </div>
       <div
         id="color-calendar-2"
-        class="bg-white border border-gray-300 rounded-lg p-4 mb-4 lg:mb-0"
+        class="bg-white border border-gray-300 rounded-lg p-3 mb-6 lg:mb-0 mx-auto max-w-sm lg:max-w-none"
       >
       </div>
       <div
         id="color-calendar-3"
-        class="bg-white border border-gray-300 rounded-lg p-4"
+        class="bg-white border border-gray-300 rounded-lg p-3 mx-auto max-w-sm lg:max-w-none"
       >
       </div>
     </div>
@@ -147,7 +147,32 @@ const holidayData = await fetchHolidayData();
   /* モバイル対応 */
   @media (max-width: 1023px) {
     .calendar-grid {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .calendar-grid [id^="color-calendar"] {
+      width: 100%;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+    
+    /* モバイルでのフォントサイズ調整 */
+    .calendar-grid [id^="color-calendar"].color-calendar .calendar__year,
+    .calendar-grid [id^="color-calendar"].color-calendar .calendar__month {
+      font-size: 1.5rem;
+    }
+    
+    .calendar-grid [id^="color-calendar"] .calendar__weekday {
+      font-size: 1.2rem;
+      padding: 0.25rem 0;
+    }
+    
+    .calendar-grid [id^="color-calendar"] .calendar__day {
+      min-height: 3rem;
+      font-size: 1.2rem;
     }
   }
 </style>
